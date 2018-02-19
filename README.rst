@@ -35,18 +35,22 @@ You will also need to install radiogrid, which is used in one of the 2 tasks. Ty
 
 How to use it:
 ***************
-To use the MTurk waiting page, just inherit your wait pages from CustomMturkWaitPage instead of the 'standard' oTree WaitPage::
+The CustomMturkWaitPage is an extension of a standard oTree WaitPage with the setting ``group_by_arrival_time = True``. Consequently, it must necessarily be the first page of an app. If you want to include a consent form before, you should put it in a first, separate app.
+
+To include a CustomMturkWaitPage, just inherit your wait pages from CustomMturkWaitPage instead of the 'standard' oTree WaitPage::
 
       from otree_mturk_utils.views import CustomMturkPage, CustomMturkWaitPage
 
       class MyWaitPage(CustomMturkWaitPage):
            ...
 
-Also inherit your other "non-wait" pages from CustomMturkPage instead of Page (this is necessary to allow a participant to reach the end of the module or the end of the experiment if he has waited too much).
+Also inherit your other "non-wait pages" from CustomMturkPage instead of Page (this is necessary to allow a participant to reach the end of the module or the end of the experiment if he has waited too much).
+
+Other standard wait pages, not located at the first position of the app, should be declared as a WaitPage, as usual.
 
 The CustomMturkWaitPage has, in addition to standard properties of an oTree WaitPage (such as ``wait_for_all_groups`` or ``group_by_arrival_time``), six additional properties (see details in the section below):
 
-1. ``pay_by_task``: compensation (in points or dollars) for each task correctly submitted at the waiting page. Default value: ``0``.
+1. ``pay_by_task``: compensation (in points or dollars) for each task correctly submitted at the waiting page. Default value: ``0`` (Note that for now this is only implemented for the real effort task survey: if you want to include pay by answer for the survey, you should adapt the wait pages).
 
 2. ``pay_by_time``: compensation (in points or dollars) for each minute of waiting at the waiting page. Default value: ``0``.
 
@@ -56,7 +60,7 @@ The CustomMturkWaitPage has, in addition to standard properties of an oTree Wait
 
 5. ``use_task``: whether the participant will see any kind of tasks while waiting. Default value: ``True``.
 
-6. ``skip_until_the_end_of`` : whether participants who ask to stop waiting, should skip the whole experiment or only the current app, or only the current round (also remember that participants will not skip pages that do not inherit from CustomMturkPage, CustomMturkWaitPage, whatever the value of this attribute). Default value: ``experiment`` . Other possible values: ``app`` and ``round``.
+6. ``skip_until_the_end_of`` : whether participants who ask to stop waiting, should skip the whole experiment or only the current app, or only the current round (also remember that participants will not skip pages that do not inherit from CustomMturkPage, whatever the value of this attribute. The will skip standard Wait Pages if they are located in the same app). Default value: ``experiment`` . Other possible values: ``app`` and ``round``. (Note, in case you have several apps in the sequence and want to allow a participant to skip everything until the end of the experiment: once you have included a CustomMturkWaitPage in an app, you might have to also add a CustomMturkWaitPage at the start of the following apps).
 
 
 What does the default Custom MTurk Wait Page do?
