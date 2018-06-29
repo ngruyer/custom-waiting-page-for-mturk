@@ -26,7 +26,8 @@ You will also need to run the standard update process detailed in the `otree man
 
 4. In the ``views.py`` file of your project, import the pages::
 
-    from otree_mturk_utils.views import CustomMturkPage, CustomMturkWaitPage (or from otree_mturk_utils.pages import CustomMturkPage, CustomMturkWaitPage if you use otree 2)
+    from otree_mturk_utils.views import CustomMturkPage, CustomMturkWaitPage 
+(or ``from otree_mturk_utils.pages import CustomMturkPage, CustomMturkWaitPage`` if you use otree 2)
 
 How to use it:
 ***************
