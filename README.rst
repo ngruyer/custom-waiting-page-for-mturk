@@ -20,11 +20,13 @@ You will also need to install radiogrid, which is used in one of the 2 tasks. Ty
 
     EXTENSION_APPS  = [
         'otree_mturk_utils',
-    ]
+    ].
+
+You will also need to run the standard update process detailed in the `otree manual <https://otree.readthedocs.io/en/latest/misc/v20.html#updating-your-code>`_. If you want to run the 2 demo apps, you will also need to search for ``from otree_mturk_utils.views import CustomMturkPage, CustomMturkWaitPage`` in the pages/views files of the 2 apps and replace ``otree_mturk_utils.views`` with ``otree_mturk_utils.pages``.
 
 4. In the ``views.py`` file of your project, import the pages::
 
-    from otree_mturk_utils.views import CustomMturkPage, CustomMturkWaitPage
+    from otree_mturk_utils.views import CustomMturkPage, CustomMturkWaitPage (or from otree_mturk_utils.pages import CustomMturkPage, CustomMturkWaitPage if you use otree 2)
 
 How to use it:
 ***************
@@ -49,7 +51,7 @@ The CustomMturkWaitPage has, in addition to standard properties of an oTree Wait
 
 3. ``startwp_timer``: After how long will the participant be offered to quit the study (in seconds). Default value: ``7200``.
 
-4. ``task``: What kind of activity a person can do while waiting. Right now there are two options: filling in a 'Big Five' questionnaire and a real effort task (finding sum of two maximum numbers). In the future we will add games as an option (tic tac toe, snake, hangman etc.) . Possible values now: ``['survey', 'real_effort']``. Default value: ``real_effort`` .
+4. ``task``: What kind of activity a person can do while waiting. Right now there are two options: filling in a 'Big Five' questionnaire and a real effort task (finding sum of two maximum numbers). In the future we will add games as an option (tic tac toe, snake, hangman etc.) . Possible values now: ``['survey', 'real_effort']``. Default value: ``real_effort`` . (Note: The 'survey' task might need to be adapted if you use oTree 2+, in order to remove radiogrid)'
 
 5. ``use_task``: whether the participant will see any kind of tasks while waiting. Default value: ``True``.
 
@@ -77,7 +79,7 @@ task by setting the attributes pay_by_task and pay_by_time in your waitpage (by 
 The experimenter can also set a limit of time after which a player is offered to exit the study
 if he wants (by specifying the attribute “startwp_timer”, labelled in minutes, which is by default
 equal to 2 hours). A timer will appear on the waitpage to indicate how much longer the participant must wait before being able to exit the experiment (hidden if more than 30 minutes are left). By clicking on “finish the study”, the participant will skip
-all the CustomMturkPage and CustomMturkWaitPage pages in the rest of the round (if skip_until_the_end_of = 'round'), of the app (if skip_until_the_end_of = 'round'), or of the experiment (if skip_until_the_end_of = 'experiment'. In this case, just make sure that a CustomMturkWaitPage is also included at the start of each of the subsequent app that you want the participant to skip. Finally, if you want the participant to skip the whole experiment but to complete a survey in a final app, just do not inherit the survey pages from CustomMturkPage). I
+all the CustomMturkPage and CustomMturkWaitPage pages in the rest of the round (if skip_until_the_end_of = 'round'), of the app (if skip_until_the_end_of = 'round'), or of the experiment (if skip_until_the_end_of = 'experiment'. In this case, just make sure that a CustomMturkWaitPage is also included at the start of each of the subsequent app that you want the participant to skip. Finally, if you want the participant to skip the whole experiment but to complete a survey in a final app, just do not inherit the survey pages from CustomMturkPage).
 
 The CustomMturkWaitPage also displays the number of participants missing before a group can be formed (you might need to hide or adapt this if your grouping logic is complex).
 
