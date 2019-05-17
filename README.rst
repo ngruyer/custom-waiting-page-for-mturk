@@ -4,13 +4,12 @@ Custom Waiting Page for mTurk experiments with oTree
 
 This project is a collaboration between Essi Kujansuu (EUI), Nicolas Gruyer (`Economics Games <https://economics-games.com>`_) and Philipp Chapkovski (UZH).
 
-    
+
 This code has been tested and seems to work fine with with oTree 1.4.2 and 2.1.9 (after adaptiong the code, if oTree 2). It has not been tested with other versions.
 
 Note : Be careful, if you use the CustomMturkWaitPage in an elaborate experiment, with a sequence of several apps and/or a complex grouping logic. 
 It can be used in these situations, but this is less easy and would probably require that you understand how the code of page works (how it sets exiters, how it allows exiters to go through "standard" pages...). Otherwise, I would advise you to not depart from standard uses (cf. examples that are provided). 
 In particular, a CustomMturkWaitPage is an extension of a standard oTree Wait Page with "group_by_arrival_time = True", even if you do not declare it in your app. Consequently, it must only be used as the first page of the page_sequence of an app.
-
 
 Installation:
 ***************
@@ -67,6 +66,15 @@ The CustomMturkWaitPage has, in addition to standard properties of an oTree Wait
 6. ``use_task``: whether the participant will see any kind of tasks while waiting. Default value: ``True``.
 
 7. ``skip_until_the_end_of`` : whether participants who ask to stop waiting, should skip the whole experiment or only the current app, or only the current round (also remember that participants will not skip pages that do not inherit from CustomMturkPage, whatever the value of this attribute. The will skip standard Wait Pages if they are located in the same app). Default value: ``experiment`` . Other possible values: ``app`` and ``round``. (Note, in case you have several apps in the sequence and want to allow a participant to skip everything until the end of the experiment: once you have included a CustomMturkWaitPage in an app, you might have to also add a CustomMturkWaitPage at the start of the following apps).
+
+Important Note, if exiters have to go through many **standard** wait pages in a row
+--------------------------------------------------------------------------------
+In some cases, if exiters have to go through many **standard** wait pages in a row, this can create a redirectCycleError(). To avoid this problem, just add an is_displayed() method in your **standard** wait pages and return False if the participant is detected to be an exiter.
+You can detect an exiter like this::
+
+      app_name = self.player._meta.app_label
+      participant = self.player.participant
+      exiter = participant.vars.get('go_to_the_end', False) or participant.vars.get('skip_the_end_of_app_{}'.format(app_name), False) or participant.vars.get('skip_the_end_of_app_{}_round_{}'.format(app_name , self.player.round_number), False)
 
 
 What does the default Custom MTurk Wait Page do?
@@ -128,6 +136,9 @@ and the redirection is delayed by 10s (10 000 ms):
     }, 10000);
     
 instead of just ``window.location.href = '{{ view.redirect_url|safe }}';``
+
+
+
 
 
 THIS CODE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
